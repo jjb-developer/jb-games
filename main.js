@@ -1,5 +1,5 @@
 import { Board } from './components/Board.js'
-import { grid } from './vars.js'
+import { grid, arrow } from './vars.js'
 import { render, direccion, snake, moveSnake, comer } from './logica.js'
 
 const $ = tag => document.querySelector(tag)
@@ -20,27 +20,31 @@ $('#down').addEventListener('click', ()=> direc = 'down' )
 $('#left').addEventListener('click', ()=> direc = 'left' )
 $('#right').addEventListener('click', ()=> direc = 'right' )
 
-const arrow = {
-	'left': { x: 0, y: -1},
-	'right': { x: 0, y: 1},
-	'up': { x: -1, y: 0},
-	'down': { x: 1, y: 0}
-}
+let direc = 'down'
+let pSnake = [[2,0],[1,0],[0,0]]
+let eat = comer()
+let velocity = 500
 
-let direc = 'left'
-let pSnake = [[4,4],[4,5],[4,6],[5,6],[6,6],[7,6]]
-let eat = [7,5]
-
-setInterval(()=>{
-
-	pSnake = moveSnake(arrow[direc].x, arrow[direc].y, pSnake)
-	if(eat[0]===pSnake[0][0] && eat[1]===pSnake[0][1]){
-		pSnake.push(pSnake[pSnake.length-1])
+const btn_play = $('#btn_play')
+btn_play.addEventListener('click', ()=>{
+	
+	const play = () => {
+		pSnake = moveSnake(arrow[direc].x, arrow[direc].y, pSnake)
+		if(eat[0]===pSnake[0][0] && eat[1]===pSnake[0][1]){
+			pSnake.push(pSnake[pSnake.length-1])
+			eat = comer()
+			if(velocity !== 50) velocity -= 25
+			clearInterval(gameplay)
+			gameplay = setInterval(play,velocity)
+		}
+		const GRID = grid.map(row=>[0,0,0,0,0,0,0,0,0])
+		GRID[eat[0]][eat[1]] = 1
+		snake(GRID,pSnake)
+		cuadricula.innerHTML = ''
+		render(GRID)
 	}
-	const GRID = grid.map(row=>[0,0,0,0,0,0,0,0,0])
-	GRID[eat[0]][eat[1]] = 1
-	snake(GRID,pSnake)
-	cuadricula.innerHTML = ''
-	render(GRID)
-}, 125)
+	btn_play.classList.add('hidden')
+	let gameplay = setInterval(play,velocity)
+})
+
 

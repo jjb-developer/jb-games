@@ -1,3 +1,8 @@
+let matriz = {
+	'rows': 18,
+	'columns': 9
+}
+
 let grid = [
 	[0,0,0,0,0,0,0,0,0],
 	[0,0,0,0,0,0,0,0,0],
@@ -19,4 +24,13 @@ let grid = [
 	[0,0,0,0,0,0,0,0,0],
 ]
 
-export { grid }
+
+const arrow = {
+	'left': { x: 0, y: -1},
+	'right': { x: 0, y: 1},
+	'up': { x: -1, y: 0},
+	'down': { x: 1, y: 0}
+}
+
+
+export { grid, arrow, matriz }

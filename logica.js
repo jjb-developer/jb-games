@@ -1,6 +1,9 @@
+import { matriz } from './vars.js'
+
 function snake(grid,pos_snake){
 	for(let p=0; p<pos_snake.length; p++){
-		grid[pos_snake[p][0]][pos_snake[p][1]] = 2
+		if(p===0) grid[pos_snake[p][0]][pos_snake[p][1]] = 3
+		else grid[pos_snake[p][0]][pos_snake[p][1]] = 2
 	}
 }
 
@@ -21,27 +24,11 @@ function direccion(e){
 }
 
 
-function worldCollision(){
-	if(pY<0){
-		pY = 8
-	}
-	if(pX<0){
-		pX = 17
-	}
-	if(pY>8){
-		pY = 0
-	}
-	if(pX>17){
-		pX = 0
-	}
-}
-
-
 function render(grid){
 	const cuadricula = document.querySelector('#cuadricula')
 	grid.map(row=>row.map(col=>{
 		const div = document.createElement('div')
-		const color = col === 0 ? div.classList.add('bg-zinc-200'): col === 1 ? div.classList.add('bg-orange-500'):div.classList.add('bg-sky-500')
+		const color = col === 0 ? div.classList.add('bg-zinc-200'): col === 1 ? div.classList.add('bg-green-500'): col === 3 ? div.classList.add('bg-blue-700'):div.classList.add('bg-blue-500')
 		div.classList.add(color,'flex','items-center','justify-center')
 		//div.innerText = col
 		cuadricula.appendChild(div)
@@ -59,10 +46,10 @@ function moveSnake(vel_x,vel_y,pos_snake){
 			previuos_position = [x,y]
 			let nX = x+vel_x
 			let nY = y+vel_y
-			if(nX>17 && vel_x > 0) nX = 0
-			if(nX<0 && vel_x < 0) nX = 17
-			if(nY>8 && vel_y > 0) nY = 0
-			if(nY<0 && vel_y < 8) nY = 8
+			if(nX>matriz.rows-1 && vel_x > 0) nX = 0
+			if(nX<0 && vel_x < 0) nX = matriz.rows-1
+			if(nY>matriz.columns-1 && vel_y > 0) nY = 0
+			if(nY<0 && vel_y < 0) nY = matriz.columns-1
 			pos_snake_new.push([nX,nY])
 		} else {
 			let x = pos_snake[i][0]
@@ -76,8 +63,10 @@ function moveSnake(vel_x,vel_y,pos_snake){
 }
 
 
-function comer(eat,head){
-	if(eat === head) console.info('tenia hambre')
+function comer(){
+	let y = Math.floor(Math.random()*matriz.rows)
+	let x = Math.floor(Math.random()*matriz.columns)
+	return [y,x]
 }
 
 
