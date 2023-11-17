@@ -24,12 +24,13 @@ let direc = 'down'
 let pSnake = [[2,0],[1,0],[0,0]]
 let eat = comer()
 let velocity = 500
+render(grid)
 
 const btn_play = $('#btn_play')
 btn_play.addEventListener('click', ()=>{
 	
 	const play = () => {
-		pSnake = moveSnake(arrow[direc].x, arrow[direc].y, pSnake)
+		pSnake = moveSnake(arrow[direc].x, arrow[direc].y, pSnake,gameplay,btn_play)
 		if(eat[0]===pSnake[0][0] && eat[1]===pSnake[0][1]){
 			pSnake.push(pSnake[pSnake.length-1])
 			eat = comer()
@@ -43,8 +44,11 @@ btn_play.addEventListener('click', ()=>{
 		cuadricula.innerHTML = ''
 		render(GRID)
 	}
+
 	btn_play.classList.add('hidden')
 	let gameplay = setInterval(play,velocity)
 })
+
+
 
 

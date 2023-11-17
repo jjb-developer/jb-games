@@ -36,7 +36,7 @@ function render(grid){
 }
 
 
-function moveSnake(vel_x,vel_y,pos_snake){
+function moveSnake(vel_x,vel_y,pos_snake,gameplay,elemento){
 	let pos_snake_new = []
 	let previuos_position; 
 	for(let i=0; i<pos_snake.length; i++){
@@ -46,10 +46,26 @@ function moveSnake(vel_x,vel_y,pos_snake){
 			previuos_position = [x,y]
 			let nX = x+vel_x
 			let nY = y+vel_y
-			if(nX>matriz.rows-1 && vel_x > 0) nX = 0
-			if(nX<0 && vel_x < 0) nX = matriz.rows-1
-			if(nY>matriz.columns-1 && vel_y > 0) nY = 0
-			if(nY<0 && vel_y < 0) nY = matriz.columns-1
+			if(nX>matriz.rows-1 && vel_x > 0){
+				clearInterval(gameplay)
+				elemento.classList.remove('hidden')
+			}
+			if(nX<0 && vel_x < 0){
+				clearInterval(gameplay)
+				elemento.classList.remove('hidden')
+			}
+			if(nY>matriz.columns-1 && vel_y > 0){
+				clearInterval(gameplay)
+				elemento.classList.remove('hidden')
+			}
+			if(nY<0 && vel_y < 0){
+				clearInterval(gameplay)
+				elemento.classList.remove('hidden')
+			}
+			//if(nX>matriz.rows-1 && vel_x > 0) nX = 0
+			//if(nX<0 && vel_x < 0) nX = matriz.rows-1
+			//if(nY>matriz.columns-1 && vel_y > 0) nY = 0
+			//if(nY<0 && vel_y < 0) nY = matriz.columns-1
 			pos_snake_new.push([nX,nY])
 		} else {
 			let x = pos_snake[i][0]
