@@ -1,9 +1,10 @@
-import { matriz } from './vars.js'
+import { matriz, color } from './vars.js'
 
 function snake(grid,pos_snake){
 	for(let p=0; p<pos_snake.length; p++){
-		if(p===0) grid[pos_snake[p][0]][pos_snake[p][1]] = 3
-		else grid[pos_snake[p][0]][pos_snake[p][1]] = 2
+		if(p===0) grid[pos_snake[p][0]][pos_snake[p][1]] = 2
+		else if(p===1) grid[pos_snake[p][0]][pos_snake[p][1]] = 3
+		else grid[pos_snake[p][0]][pos_snake[p][1]] = 4
 	}
 }
 
@@ -28,8 +29,8 @@ function render(grid){
 	const cuadricula = document.querySelector('#cuadricula')
 	grid.map(row=>row.map(col=>{
 		const div = document.createElement('div')
-		const color = col === 0 ? div.classList.add('bg-zinc-200'): col === 1 ? div.classList.add('bg-green-500'): col === 3 ? div.classList.add('bg-blue-700'):div.classList.add('bg-blue-500')
-		div.classList.add(color,'flex','items-center','justify-center')
+		const colorEnd = col === 0 ? div.classList.add(color.bg): col === 1 ? div.classList.add(color.eat): col === 2 ? div.classList.add(color.snake.n1): col === 3 ? div.classList.add(color.snake.n2):div.classList.add(color.snake.n)
+		div.classList.add(colorEnd,'flex','items-center','justify-center')
 		//div.innerText = col
 		cuadricula.appendChild(div)
 	}))
@@ -62,10 +63,6 @@ function moveSnake(vel_x,vel_y,pos_snake,gameplay,elemento){
 				clearInterval(gameplay)
 				elemento.classList.remove('hidden')
 			}
-			//if(nX>matriz.rows-1 && vel_x > 0) nX = 0
-			//if(nX<0 && vel_x < 0) nX = matriz.rows-1
-			//if(nY>matriz.columns-1 && vel_y > 0) nY = 0
-			//if(nY<0 && vel_y < 0) nY = matriz.columns-1
 			pos_snake_new.push([nX,nY])
 		} else {
 			let x = pos_snake[i][0]
@@ -75,7 +72,11 @@ function moveSnake(vel_x,vel_y,pos_snake,gameplay,elemento){
 			previuos_position = [x,y]
 		}
 	}
-	return pos_snake_new
+	let mapa = pos_snake_new.map(e=>''+e)
+	if(mapa.length !== new Set(mapa).size){
+		clearInterval(gameplay)
+		elemento.classList.remove('hidden')
+	} else return pos_snake_new
 }
 
 

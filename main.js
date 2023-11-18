@@ -8,11 +8,11 @@ const app = $('#app')
 app.insertAdjacentHTML("beforeend", Board())
 document.addEventListener('keyup', (e)=>{
 	const newDirec = direccion(e)
-	if(newDirec === 'right' && direc === 'left') pSnake.reverse()
-	if(newDirec === 'left' && direc === 'right') pSnake.reverse()
-	if(newDirec === 'up' && direc === 'down') pSnake.reverse()
-	if(newDirec === 'down' && direc === 'up') pSnake.reverse()
-	direc = newDirec
+	if(newDirec === 'right' && direc === 'left') direc = 'left'
+	else if(newDirec === 'left' && direc === 'right') direc = 'right'
+	else if(newDirec === 'up' && direc === 'down') direc = 'down'
+	else if(newDirec === 'down' && direc === 'up') direc = 'up'
+	else direc = direccion(e)
 })
 
 $('#up').addEventListener('click', ()=> direc = 'up' )
@@ -20,20 +20,23 @@ $('#down').addEventListener('click', ()=> direc = 'down' )
 $('#left').addEventListener('click', ()=> direc = 'left' )
 $('#right').addEventListener('click', ()=> direc = 'right' )
 
-let direc = 'down'
-let pSnake = [[2,0],[1,0],[0,0]]
-let eat = comer()
-let velocity = 500
+let direc;
+let velocity;
+let pSnake;
+let points;
+let eat;
 render(grid)
+const p = $('#point')
+const menu = $('#menu')
 
-const btn_play = $('#btn_play')
-btn_play.addEventListener('click', ()=>{
-	
+function jugar(){
 	const play = () => {
-		pSnake = moveSnake(arrow[direc].x, arrow[direc].y, pSnake,gameplay,btn_play)
+		pSnake = moveSnake(arrow[direc].x, arrow[direc].y, pSnake,gameplay,menu,direc)
 		if(eat[0]===pSnake[0][0] && eat[1]===pSnake[0][1]){
 			pSnake.push(pSnake[pSnake.length-1])
 			eat = comer()
+			points += 100
+			p.innerText = points
 			if(velocity !== 50) velocity -= 25
 			clearInterval(gameplay)
 			gameplay = setInterval(play,velocity)
@@ -44,9 +47,21 @@ btn_play.addEventListener('click', ()=>{
 		cuadricula.innerHTML = ''
 		render(GRID)
 	}
-
-	btn_play.classList.add('hidden')
+	points = 0
+	velocity = 500
+	direc = 'down'
+	pSnake = [[2,0],[1,0],[0,0]]
+	eat = comer()
 	let gameplay = setInterval(play,velocity)
+}
+
+
+const btn_play = $('#btn_play')
+const box_point = $('#box_point')
+btn_play.addEventListener('click', ()=>{
+	jugar()
+	menu.classList.add('hidden')
+	box_point.classList.remove('hidden')
 })
 
 
